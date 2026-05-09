@@ -6,6 +6,21 @@
   body {
     @apply bg-gray-50 text-gray-900;
   }
+  
+  /* Improve mobile number input styling */
+  input[type="number"] {
+    @apply text-base;
+  }
+  
+  /* Mobile-specific font sizing for figures */
+  @media (max-width: 640px) {
+    .currency-value {
+      @apply text-sm font-medium;
+    }
+    .percentage-value {
+      @apply text-xs font-medium;
+    }
+  }
 }
 
 @layer components {
@@ -34,7 +49,22 @@
   }
   
   .input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base;
+  }
+  
+  /* Mobile-optimized input for numbers */
+  .input-number {
+    @apply w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base text-lg font-medium;
+  }
+  
+  /* Mobile-friendly currency display */
+  .currency-display {
+    @apply font-medium text-sm sm:text-base;
+  }
+  
+  /* Mobile-friendly percentage display */
+  .percentage-display {
+    @apply font-medium text-xs sm:text-sm;
   }
   
   .progress-bar {
@@ -55,5 +85,27 @@
   
   .item-progress-fill {
     @apply h-1 rounded-full transition-all duration-300;
+  }
+  
+  /* Mobile figure containers */
+  .figure-container {
+    @apply min-w-0 truncate;
+  }
+  
+  .figure-row {
+    @apply flex items-center justify-between py-1;
+  }
+  
+  .figure-label {
+    @apply text-xs text-gray-500 truncate flex-shrink-0;
+  }
+  
+  .figure-value {
+    @apply font-medium text-sm truncate;
+  }
+  
+  /* Mobile button improvements */
+  .mobile-button {
+    @apply px-3 py-3 text-base font-medium;
   }
 }

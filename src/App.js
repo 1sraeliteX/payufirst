@@ -405,11 +405,11 @@ const BudgetTracker = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
         <div className="lg:col-span-2">
           <div className="card">
-            <h2 className="text-xl font-semibold mb-4">Budget Setup</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h2 className="text-lg lg:text-xl font-semibold mb-3 lg:mb-4">Budget Setup</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Income/Budget Amount
@@ -620,18 +620,18 @@ const BudgetTracker = () => {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-3 gap-4 text-sm mb-2">
-                      <div>
-                        <span className="text-gray-500">Allocated:</span>
-                        <span className="ml-1 font-medium">{formatCurrency(allocated)}</span>
+                    <div className="grid grid-cols-3 gap-2 lg:gap-4 text-xs lg:text-sm mb-2">
+                      <div className="min-w-0">
+                        <span className="text-gray-500 block truncate">Allocated:</span>
+                        <span className="ml-1 font-medium block">{formatCurrency(allocated)}</span>
                       </div>
-                      <div>
-                        <span className="text-gray-500">Spent:</span>
-                        <span className="ml-1 font-medium">{formatCurrency(categorySpent)}</span>
+                      <div className="min-w-0">
+                        <span className="text-gray-500 block truncate">Spent:</span>
+                        <span className="ml-1 font-medium block">{formatCurrency(categorySpent)}</span>
                       </div>
-                      <div>
-                        <span className="text-gray-500">Remaining:</span>
-                        <span className={`ml-1 font-medium ${remaining < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                      <div className="min-w-0">
+                        <span className="text-gray-500 block truncate">Remaining:</span>
+                        <span className={`ml-1 font-medium block ${remaining < 0 ? 'text-red-600' : 'text-green-600'}`}>
                           {formatCurrency(remaining)}
                         </span>
                       </div>
@@ -665,18 +665,18 @@ const BudgetTracker = () => {
                         {/* Add New Item Form */}
                         {newItem.categoryId === category.id && (
                           <div className="mb-3 p-3 bg-gray-50 rounded-lg">
-                            <div className="grid grid-cols-2 gap-2 mb-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
                               <input
                                 type="text"
                                 placeholder="Item name"
-                                className="px-2 py-1 border border-gray-300 rounded text-sm"
+                                className="px-2 py-2 border border-gray-300 rounded text-sm"
                                 value={newItem.name}
                                 onChange={(e) => setNewItem(prev => ({ ...prev, name: e.target.value }))}
                               />
                               <input
                                 type="number"
                                 placeholder="Allocated amount"
-                                className="px-2 py-1 border border-gray-300 rounded text-sm"
+                                className="px-2 py-2 border border-gray-300 rounded text-sm"
                                 value={newItem.budgetedAmount}
                                 onChange={(e) => setNewItem(prev => ({ ...prev, budgetedAmount: e.target.value }))}
                               />
@@ -684,13 +684,13 @@ const BudgetTracker = () => {
                             <div className="flex space-x-2">
                               <button
                                 onClick={() => addItem(category.id)}
-                                className="px-2 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                                className="px-3 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
                               >
                                 Add
                               </button>
                               <button
                                 onClick={() => setNewItem({ categoryId: null, name: '', budgetedAmount: '' })}
-                                className="px-2 py-1 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
+                                className="px-3 py-2 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
                               >
                                 Cancel
                               </button>
@@ -708,27 +708,27 @@ const BudgetTracker = () => {
                               <div key={item.id} className="p-2 bg-gray-50 rounded-lg">
                                 {editingItem === item.id ? (
                                   <div className="space-y-2">
-                                    <div className="grid grid-cols-2 gap-2">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                       <input
                                         type="text"
                                         value={item.name}
                                         onChange={(e) => updateItem(category.id, item.id, { name: e.target.value })}
-                                        className="px-2 py-1 border border-gray-300 rounded text-sm"
+                                        className="px-2 py-2 border border-gray-300 rounded text-sm"
                                       />
                                       <input
                                         type="number"
                                         value={item.budgetedAmount}
                                         onChange={(e) => updateItem(category.id, item.id, { budgetedAmount: parseFloat(e.target.value) || 0 })}
-                                        className="px-2 py-1 border border-gray-300 rounded text-sm"
+                                        className="px-2 py-2 border border-gray-300 rounded text-sm"
                                       />
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
                                       <input
                                         type="number"
                                         placeholder="Actual spent"
                                         value={item.actualSpent || ''}
                                         onChange={(e) => updateItem(category.id, item.id, { actualSpent: parseFloat(e.target.value) || 0 })}
-                                        className="px-2 py-1 border border-gray-300 rounded text-sm w-24"
+                                        className="px-2 py-2 border border-gray-300 rounded text-sm w-full sm:w-24"
                                       />
                                       <div className="flex space-x-1">
                                         <button
@@ -747,18 +747,18 @@ const BudgetTracker = () => {
                                     </div>
                                   </div>
                                 ) : (
-                                  <div className="flex items-center justify-between">
+                                  <div className="flex flex-col space-y-2">
                                     <div className="flex-1">
                                       <div className="font-medium text-sm">{item.name}</div>
-                                      <div className="text-xs text-gray-500">
-                                        Allocated: {formatCurrency(item.budgetedAmount)} | 
-                                        Spent: {formatCurrency(item.actualSpent || 0)} | 
-                                        <span className={itemRemaining < 0 ? 'text-red-600' : 'text-green-600'}>
-                                          Remaining: {formatCurrency(itemRemaining)}
-                                        </span>
+                                      <div className="text-xs text-gray-500 space-y-1">
+                                        <div>Allocated: <span className="font-medium">{formatCurrency(item.budgetedAmount)}</span></div>
+                                        <div>Spent: <span className="font-medium">{formatCurrency(item.actualSpent || 0)}</span></div>
+                                        <div className={itemRemaining < 0 ? 'text-red-600' : 'text-green-600'}>
+                                          Remaining: <span className="font-medium">{formatCurrency(itemRemaining)}</span>
+                                        </div>
                                       </div>
                                       {item.budgetedAmount > 0 && (
-                                        <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
+                                        <div className="w-full bg-gray-200 rounded-full h-1 mt-2">
                                           <div
                                             className={`h-1 rounded-full transition-all duration-300 ${
                                               itemSpentPercentage > 100 ? 'bg-red-500' : 
@@ -769,7 +769,7 @@ const BudgetTracker = () => {
                                         </div>
                                       )}
                                     </div>
-                                    <div className="flex space-x-1 ml-2">
+                                    <div className="flex justify-end space-x-1">
                                       <button
                                         onClick={() => setEditingItem(item.id)}
                                         className="p-1 text-gray-600 hover:bg-gray-50 rounded"
@@ -808,39 +808,50 @@ const BudgetTracker = () => {
             <h2 className="text-xl font-semibold mb-4">Budget Overview</h2>
             {parseFloat(budget.amount) > 0 ? (
               <>
-                <ResponsiveContainer width="100%" height={200}>
-                  <PieChart>
-                    <Pie
-                      data={chartData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={2}
-                      dataKey="value"
-                    >
-                      {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip formatter={(value) => formatCurrency(value)} />
-                  </PieChart>
-                </ResponsiveContainer>
+                <div className="w-full h-48 sm:h-56 lg:h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={chartData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={40}
+                        outerRadius={60}
+                        paddingAngle={1}
+                        dataKey="value"
+                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                        labelLine={false}
+                      >
+                        {chartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        formatter={(value) => formatCurrency(value)} 
+                        contentStyle={{
+                          fontSize: '12px',
+                          borderRadius: '8px',
+                          border: '1px solid #e5e7eb'
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
                 
                 {/* Category Legend */}
-                <div className="mt-6 space-y-2">
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Categories</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="mt-4 lg:mt-6 space-y-2">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-2 lg:mb-3">Categories</h3>
+                  <div className="grid grid-cols-1 gap-2">
                     {categories.map(category => {
                       const allocated = (parseFloat(budget.amount) || 0) * category.percentage / 100;
                       const categorySpent = calculateCategorySpent(category);
                       const spentPercentage = allocated > 0 ? (categorySpent / allocated) * 100 : 0;
                       
                       return (
-                        <div key={category.id} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50">
-                          <div className="flex items-center space-x-2">
+                        <div key={category.id} className="flex items-center space-x-2 lg:space-x-3 p-2 rounded-lg hover:bg-gray-50">
+                          <div className="flex items-center space-x-1 lg:space-x-2 flex-shrink-0">
                             <div 
-                              className="w-4 h-4 rounded-full border border-gray-300" 
+                              className="w-3 h-3 lg:w-4 lg:h-4 rounded-full border border-gray-300" 
                               style={{ backgroundColor: category.color }}
                             />
                             <div style={{ color: category.color }}>
@@ -848,13 +859,13 @@ const BudgetTracker = () => {
                             </div>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium truncate">{category.name}</span>
-                              <span className="text-sm text-gray-600">{category.percentage}%</span>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-sm font-medium truncate pr-2">{category.name}</span>
+                              <span className="text-sm text-gray-600 flex-shrink-0">{category.percentage}%</span>
                             </div>
                             <div className="flex items-center justify-between text-xs text-gray-500">
-                              <span>{formatCurrency(allocated)}</span>
-                              <span className={spentPercentage > 100 ? 'text-red-600' : spentPercentage > 80 ? 'text-yellow-600' : 'text-green-600'}>
+                              <span className="truncate pr-2">{formatCurrency(allocated)}</span>
+                              <span className={`flex-shrink-0 ${spentPercentage > 100 ? 'text-red-600' : spentPercentage > 80 ? 'text-yellow-600' : 'text-green-600'}`}>
                                 {spentPercentage.toFixed(0)}% spent
                               </span>
                             </div>
@@ -875,16 +886,16 @@ const BudgetTracker = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
         <div className="card">
-          <h2 className="text-xl font-semibold mb-4">Add Expense</h2>
-          <div className="space-y-4">
+          <h2 className="text-lg lg:text-xl font-semibold mb-3 lg:mb-4">Add Expense</h2>
+          <div className="space-y-3 lg:space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Category
               </label>
               <select
-                className="input"
+                className="input text-base"
                 value={newExpense.category}
                 onChange={(e) => setNewExpense(prev => ({ ...prev, category: e.target.value }))}
               >
@@ -900,7 +911,7 @@ const BudgetTracker = () => {
                   Budget Item (Optional)
                 </label>
                 <select
-                  className="input"
+                  className="input text-base"
                   value={newExpense.itemId || ''}
                   onChange={(e) => setNewExpense(prev => ({ ...prev, itemId: e.target.value }))}
                 >
@@ -917,7 +928,9 @@ const BudgetTracker = () => {
               </label>
               <input
                 type="number"
-                className="input"
+                inputMode="decimal"
+                step="0.01"
+                className="input text-base text-lg font-medium"
                 placeholder="Enter amount"
                 value={newExpense.amount}
                 onChange={(e) => setNewExpense(prev => ({ ...prev, amount: e.target.value }))}
@@ -929,7 +942,7 @@ const BudgetTracker = () => {
               </label>
               <input
                 type="text"
-                className="input"
+                className="input text-base"
                 placeholder="What was this expense for?"
                 value={newExpense.description}
                 onChange={(e) => setNewExpense(prev => ({ ...prev, description: e.target.value }))}
@@ -937,7 +950,7 @@ const BudgetTracker = () => {
             </div>
             <button
               onClick={addExpense}
-              className="btn btn-primary w-full"
+              className="btn btn-primary w-full py-3 text-base font-medium"
             >
               <Plus className="w-4 h-4 inline mr-2" />
               Add Expense
@@ -946,25 +959,25 @@ const BudgetTracker = () => {
         </div>
 
         <div className="card">
-          <h2 className="text-xl font-semibold mb-4">Recent Expenses</h2>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <h2 className="text-lg lg:text-xl font-semibold mb-3 lg:mb-4">Recent Expenses</h2>
+          <div className="space-y-2 max-h-64 lg:max-h-80 overflow-y-auto">
             {expenses.length > 0 ? (
               expenses.slice(-10).reverse().map(expense => (
-                <div key={expense.id} className="flex items-center justify-between p-2 border border-gray-200 rounded">
-                  <div className="flex-1">
-                    <div className="font-medium text-sm">{expense.description}</div>
+                <div key={expense.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border border-gray-200 rounded-lg space-y-2 sm:space-y-0">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm mb-1">{expense.description}</div>
                     <div className="text-xs text-gray-500">{expense.category}</div>
                     {expense.itemId && (
-                      <div className="text-xs text-orange-600">
+                      <div className="text-xs text-orange-600 mt-1">
                         Amount removed from allocation: {formatCurrency(expense.amount)}
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="font-medium">{formatCurrency(expense.amount)}</span>
+                  <div className="flex items-center justify-between sm:justify-end sm:space-x-2">
+                    <span className="font-semibold text-sm lg:text-base">{formatCurrency(expense.amount)}</span>
                     <button
                       onClick={() => deleteExpense(expense.id)}
-                      className="p-1 text-red-600 hover:bg-red-50 rounded"
+                      className="p-1 text-red-600 hover:bg-red-50 rounded ml-2"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>

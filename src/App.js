@@ -133,17 +133,21 @@ const BudgetTracker = () => {
       setEmergencyFundGoal(parsed.emergencyFundGoal || 10000);
       setSelectedCurrency(parsed.selectedCurrency || 'NGN');
     }
-  }, [categories]);
+  }, []);
 
   useEffect(() => {
-    const dataToSave = {
-      budget,
-      categories,
-      expenses,
-      emergencyFundGoal,
-      selectedCurrency
-    };
-    localStorage.setItem('budgetTrackerData', JSON.stringify(dataToSave));
+    const timeoutId = setTimeout(() => {
+      const dataToSave = {
+        budget,
+        categories,
+        expenses,
+        emergencyFundGoal,
+        selectedCurrency
+      };
+      localStorage.setItem('budgetTrackerData', JSON.stringify(dataToSave));
+    }, 500);
+    
+    return () => clearTimeout(timeoutId);
   }, [budget, categories, expenses, emergencyFundGoal, selectedCurrency]);
 
   // Calculate category spent from items with error handling

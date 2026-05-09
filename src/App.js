@@ -168,8 +168,14 @@ const BudgetTracker = () => {
     }, 0);
   };
 
-  const calculateBudgetSplit = () => {
+  // Helper to get budget amount for calculations
+  const getBudgetAmount = () => {
     const amount = parseFloat(budget.amount) || 0;
+    return isNaN(amount) ? 0 : amount;
+  };
+
+  const calculateBudgetSplit = () => {
+    const amount = getBudgetAmount();
     return categories.map(cat => {
       const catSpent = calculateCategorySpent(cat);
       const catBudgeted = calculateCategoryBudgeted(cat);
@@ -428,11 +434,24 @@ const BudgetTracker = () => {
                 </label>
                 <input
                   type="number"
-                  className="input"
+                  inputMode="decimal"
+                  step="0.01"
+                  className="input text-base text-lg font-medium"
                   placeholder="Enter amount"
                   value={budget.amount}
                   onChange={(e) => setBudget(prev => ({ ...prev, amount: e.target.value }))}
+                  onBlur={(e) => {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value)) {
+                      setBudget(prev => ({ ...prev, amount: value.toFixed(2) }));
+                    }
+                  }}
                 />
+                {budget.amount && !isNaN(parseFloat(budget.amount)) && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Formatted: {formatCurrency(budget.amount)}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">

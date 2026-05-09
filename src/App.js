@@ -58,7 +58,7 @@ const CATEGORY_COLORS = [
 
 const BudgetTracker = () => {
   const [budget, setBudget] = useState({
-    amount: '',
+    amount: '0',
     period: 'monthly'
   });
   
@@ -118,7 +118,7 @@ const BudgetTracker = () => {
     const savedData = localStorage.getItem('budgetTrackerData');
     if (savedData) {
       const parsed = JSON.parse(savedData);
-      setBudget(parsed.budget || { amount: '', period: 'monthly' });
+      setBudget(parsed.budget || { amount: '0', period: 'monthly' });
       
       // Ensure categories have required properties for backward compatibility
       const savedCategories = parsed.categories || categories;
@@ -170,8 +170,15 @@ const BudgetTracker = () => {
 
   // Helper to get budget amount for calculations
   const getBudgetAmount = () => {
-    const amount = parseFloat(budget.amount) || 0;
-    return isNaN(amount) ? 0 : amount;
+    if (!budget.amount || budget.amount === '') {
+      return 0;
+    }
+    const amount = parseFloat(budget.amount);
+    if (isNaN(amount)) {
+      console.warn('Invalid budget amount:', budget.amount);
+      return 0;
+    }
+    return amount;
   };
 
   const calculateBudgetSplit = () => {
@@ -437,7 +444,7 @@ const BudgetTracker = () => {
                   inputMode="decimal"
                   step="0.01"
                   className="input text-base text-lg font-medium"
-                  placeholder="Enter amount"
+                  placeholder="0.00"
                   value={budget.amount}
                   onChange={(e) => setBudget(prev => ({ ...prev, amount: e.target.value }))}
                   onBlur={(e) => {

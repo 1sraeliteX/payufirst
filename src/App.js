@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { DollarSign, TrendingUp, PiggyBank, ShoppingCart, AlertTriangle, Plus, Trash2, Edit2, Save, X, Globe, ChevronDown, ChevronRight, Home, Car, Heart, Coffee, Utensils, Gamepad2, Book, Briefcase, Gift, Plane, Camera, Music, Smartphone, Tv, Wifi, Zap, Droplet, Flame, Wind, Sun, Moon, Star, Cloud, TreePine, Flower, Apple, Beer, Pizza, Cake } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { TrendingUp, PiggyBank, ShoppingCart, AlertTriangle, Plus, Trash2, Edit2, Save, X, Globe, ChevronDown, ChevronRight, Home, Car, Heart, Coffee, Utensils, Gamepad2, Book, Briefcase, Gift, Plane, Camera, Music, Smartphone, Tv, Wifi, Zap, Droplet, Flame, Wind, Sun, Moon, Star, Cloud, TreePine, Flower, Apple, Beer, Pizza, Cake } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 // Currency configuration
 const CURRENCIES = {
@@ -127,7 +127,7 @@ const BudgetTracker = () => {
       setEmergencyFundGoal(parsed.emergencyFundGoal || 10000);
       setSelectedCurrency(parsed.selectedCurrency || 'NGN');
     }
-  }, []);
+  }, [categories]);
 
   useEffect(() => {
     const dataToSave = {
@@ -372,12 +372,6 @@ const BudgetTracker = () => {
     }
   };
 
-  const updateCategory = (categoryId, updates) => {
-    setCategories(prev => prev.map(cat => 
-      cat.id === categoryId ? { ...cat, ...updates } : cat
-    ));
-  };
-
   const budgetSplit = calculateBudgetSplit();
   const totalPercentage = categories.reduce((sum, cat) => sum + cat.percentage, 0);
   const chartData = budgetSplit.map(cat => ({
@@ -563,7 +557,6 @@ const BudgetTracker = () => {
               {categories.map(category => {
                 const allocated = (parseFloat(budget.amount) || 0) * category.percentage / 100;
                 const categorySpent = calculateCategorySpent(category);
-                const categoryBudgeted = calculateCategoryBudgeted(category);
                 const remaining = allocated - categorySpent;
                 const spentPercentage = allocated > 0 ? (categorySpent / allocated) * 100 : 0;
                 

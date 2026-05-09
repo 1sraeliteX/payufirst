@@ -96,10 +96,16 @@ const BudgetTracker = () => {
   });
   const [emergencyFundGoal, setEmergencyFundGoal] = useState(10000);
 
-  // Currency formatter utility
+  // Currency formatter utility with error handling
   const formatCurrency = (amount) => {
+    if (amount === null || amount === undefined || amount === '' || isNaN(amount)) {
+      const currency = CURRENCIES[selectedCurrency];
+      return currency.position === 'prefix' ? `${currency.symbol}0.00` : `0.00${currency.symbol}`;
+    }
+    
     const currency = CURRENCIES[selectedCurrency];
-    const formattedAmount = parseFloat(amount).toFixed(2);
+    const numAmount = parseFloat(amount);
+    const formattedAmount = numAmount.toFixed(2);
     
     if (currency.position === 'prefix') {
       return `${currency.symbol}${formattedAmount}`;
@@ -140,20 +146,26 @@ const BudgetTracker = () => {
     localStorage.setItem('budgetTrackerData', JSON.stringify(dataToSave));
   }, [budget, categories, expenses, emergencyFundGoal, selectedCurrency]);
 
-  // Calculate category spent from items
+  // Calculate category spent from items with error handling
   const calculateCategorySpent = (category) => {
     if (!category || !category.items || !Array.isArray(category.items)) {
       return 0;
     }
-    return category.items.reduce((total, item) => total + (item.actualSpent || 0), 0);
+    return category.items.reduce((total, item) => {
+      const spent = item.actualSpent || 0;
+      return total + (isNaN(spent) ? 0 : parseFloat(spent));
+    }, 0);
   };
 
-  // Calculate category budgeted from items
+  // Calculate category budgeted from items with error handling
   const calculateCategoryBudgeted = (category) => {
     if (!category || !category.items || !Array.isArray(category.items)) {
       return 0;
     }
-    return category.items.reduce((total, item) => total + (item.budgetedAmount || 0), 0);
+    return category.items.reduce((total, item) => {
+      const budgeted = item.budgetedAmount || 0;
+      return total + (isNaN(budgeted) ? 0 : parseFloat(budgeted));
+    }, 0);
   };
 
   const calculateBudgetSplit = () => {
@@ -166,10 +178,10 @@ const BudgetTracker = () => {
       
       return {
         ...cat,
-        allocated: allocated,
-        budgeted: catBudgeted,
-        spent: catSpent,
-        remaining: remaining
+        allocated: isNaN(allocated) ? 0 : allocated,
+        budgeted: isNaN(catBudgeted) ? 0 : catBudgeted,
+        spent: isNaN(catSpent) ? 0 : catSpent,
+        remaining: isNaN(remaining) ? 0 : remaining
       };
     });
   };
@@ -701,8 +713,10 @@ const BudgetTracker = () => {
                         {/* Items List */}
                         <div className="space-y-2">
                           {category.items.map(item => {
-                            const itemRemaining = item.budgetedAmount - (item.actualSpent || 0);
-                            const itemSpentPercentage = item.budgetedAmount > 0 ? ((item.actualSpent || 0) / item.budgetedAmount) * 100 : 0;
+                            const itemBudgeted = parseFloat(item.budgetedAmount) || 0;
+                            const itemSpent = parseFloat(item.actualSpent) || 0;
+                            const itemRemaining = itemBudgeted - itemSpent;
+                            const itemSpentPercentage = itemBudgeted > 0 ? (itemSpent / itemBudgeted) * 100 : 0;
                             
                             return (
                               <div key={item.id} className="p-2 bg-gray-50 rounded-lg">
@@ -717,7 +731,7 @@ const BudgetTracker = () => {
                                       />
                                       <input
                                         type="number"
-                                        value={item.budgetedAmount}
+                                        value={itemBudgeted}
                                         onChange={(e) => updateItem(category.id, item.id, { budgetedAmount: parseFloat(e.target.value) || 0 })}
                                         className="px-2 py-2 border border-gray-300 rounded text-sm"
                                       />
@@ -726,7 +740,7 @@ const BudgetTracker = () => {
                                       <input
                                         type="number"
                                         placeholder="Actual spent"
-                                        value={item.actualSpent || ''}
+                                        value={itemSpent}
                                         onChange={(e) => updateItem(category.id, item.id, { actualSpent: parseFloat(e.target.value) || 0 })}
                                         className="px-2 py-2 border border-gray-300 rounded text-sm w-full sm:w-24"
                                       />
@@ -751,13 +765,13 @@ const BudgetTracker = () => {
                                     <div className="flex-1">
                                       <div className="font-medium text-sm">{item.name}</div>
                                       <div className="text-xs text-gray-500 space-y-1">
-                                        <div>Allocated: <span className="font-medium">{formatCurrency(item.budgetedAmount)}</span></div>
-                                        <div>Spent: <span className="font-medium">{formatCurrency(item.actualSpent || 0)}</span></div>
+                                        <div>Allocated: <span className="font-medium">{formatCurrency(itemBudgeted)}</span></div>
+                                        <div>Spent: <span className="font-medium">{formatCurrency(itemSpent)}</span></div>
                                         <div className={itemRemaining < 0 ? 'text-red-600' : 'text-green-600'}>
                                           Remaining: <span className="font-medium">{formatCurrency(itemRemaining)}</span>
                                         </div>
                                       </div>
-                                      {item.budgetedAmount > 0 && (
+                                      {itemBudgeted > 0 && (
                                         <div className="w-full bg-gray-200 rounded-full h-1 mt-2">
                                           <div
                                             className={`h-1 rounded-full transition-all duration-300 ${

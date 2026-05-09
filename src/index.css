@@ -10,6 +10,14 @@
   /* Improve mobile number input styling */
   input[type="number"] {
     @apply text-base;
+    /* Fix mobile zoom issues */
+    font-size: 16px !important;
+  }
+  
+  /* Prevent mobile text overflow */
+  * {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
   }
   
   /* Mobile-specific font sizing for figures */
@@ -19,6 +27,13 @@
     }
     .percentage-value {
       @apply text-xs font-medium;
+    }
+    
+    /* Prevent mobile figure overflow */
+    .figure-container {
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
     }
   }
 }
@@ -90,6 +105,9 @@
   /* Mobile figure containers */
   .figure-container {
     @apply min-w-0 truncate;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
   }
   
   .figure-row {
@@ -102,10 +120,24 @@
   
   .figure-value {
     @apply font-medium text-sm truncate;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
   
   /* Mobile button improvements */
   .mobile-button {
     @apply px-3 py-3 text-base font-medium;
+  }
+  
+  /* Prevent mobile figure jumping */
+  .currency-display {
+    @apply font-medium text-sm sm:text-base;
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+  
+  .percentage-display {
+    @apply font-medium text-xs sm:text-sm;
+    min-width: 0;
   }
 }

@@ -599,8 +599,9 @@ const BudgetTracker = () => {
               {categories.map(category => {
                 const allocated = (parseFloat(budget.amount) || 0) * category.percentage / 100;
                 const categorySpent = calculateCategorySpent(category);
-                const remaining = allocated - categorySpent;
-                const spentPercentage = allocated > 0 ? (categorySpent / allocated) * 100 : 0;
+                const categoryBudgeted = calculateCategoryBudgeted(category);
+                const remaining = allocated - categoryBudgeted;
+                const spentPercentage = categoryBudgeted > 0 ? (categorySpent / categoryBudgeted) * 100 : 0;
                 
                 return (
                   <div key={category.id} className="border border-gray-200 rounded-lg p-4">
@@ -889,7 +890,8 @@ const BudgetTracker = () => {
                     {categories.map(category => {
                       const allocated = (parseFloat(budget.amount) || 0) * category.percentage / 100;
                       const categorySpent = calculateCategorySpent(category);
-                      const spentPercentage = allocated > 0 ? (categorySpent / allocated) * 100 : 0;
+                      const categoryBudgeted = calculateCategoryBudgeted(category);
+                      const spentPercentage = categoryBudgeted > 0 ? (categorySpent / categoryBudgeted) * 100 : 0;
                       
                       return (
                         <div key={category.id} className="flex items-center space-x-2 lg:space-x-3 p-2 rounded-lg hover:bg-gray-50">

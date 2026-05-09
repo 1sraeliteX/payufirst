@@ -286,13 +286,13 @@ const BudgetTracker = () => {
       
       setExpenses(prev => [...prev, expense]);
       
-      // Subtract from total allocations
+      // Update category spent amount
       setCategories(prev => prev.map(cat => {
         if (cat.name === newExpense.category) {
-          const catBudgeted = calculateCategoryBudgeted(cat);
+          const catSpent = calculateCategorySpent(cat);
           return {
             ...cat,
-            budgeted: catBudgeted + parseFloat(newExpense.amount)
+            spent: catSpent + parseFloat(newExpense.amount)
           };
         }
         return cat;
